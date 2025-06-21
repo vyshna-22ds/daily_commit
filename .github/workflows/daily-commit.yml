@@ -2,12 +2,13 @@ name: Daily Commit
 
 on:
   schedule:
-    - cron: '20 3 * * *'  # Runs every day at 03:20 UTC (08:50 AM IST)
-  workflow_dispatch:       # Optional manual trigger from GitHub UI
+    - cron: '20 3 * * *'  # Runs daily at 03:20 UTC (8:50 AM IST)
+  workflow_dispatch:       # Allows manual triggering from GitHub Actions tab
 
 jobs:
   daily-commit:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v3
@@ -18,6 +19,6 @@ jobs:
           git config --global user.name "DevSync Bot"
           git config --global user.email "22ds3000189@ds.study.iitm.ac.in"
           git add daily-log.txt
-          git commit -m "Daily update at $(date -u)"
+          git commit -m "Daily update at $(date -u)" || echo "No changes to commit"
           git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
           git push
